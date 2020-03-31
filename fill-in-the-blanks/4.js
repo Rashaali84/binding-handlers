@@ -6,14 +6,14 @@ try {
     state: {},
     log: [],
     set: function (key, value) {
-      _;
+      this.state[key] = value;
     },
     remove: function (key) {
-      _;
+      delete this.state[key];
     },
     renderState: function () {
       const liElements = Object.keys(this.state)
-        .map(key => `\n <li><code>${key}: ${_}</code></li>`)
+        .map(key => `\n <li><code>${key}: ${value}</code></li>`)
         .reduce((allLis, liStr) => allLis + liStr, '');
       return '<ul>' + liElements + '\n</ul>';
     },
@@ -39,27 +39,27 @@ try {
     view: function (id) {
       // debugger;
       const displayEl = document.createElement('p');
-      displayEl.innerHTML = _._();
+      displayEl.innerHTML = this.renderState();
 
       const keyInputEl = document.createElement('input');
       keyInputEl.type = 'text';
-      keyInputEl.name = _;
+      keyInputEl.name = 'enter-key';
       keyInputEl.placeholder = 'key';
 
       const valueInputEl = document.createElement('input');
       valueInputEl.type = 'text';
-      valueInputEl.name = _;
+      valueInputEl.name = 'enter-value';
       valueInputEl.placeholder = 'value';
 
       const setButtonEl = document.createElement('input');
       setButtonEl.type = 'button';
-      setButtonEl.value = _;
-      setButtonEl.onclick = _._._(_, _);
+      setButtonEl.value = 'set key';
+      setButtonEl.onclick = obj.handler.bind(this, displayEl);
 
       const removeButtonEl = document.createElement('input');
       removeButtonEl.type = 'button';
-      removeButtonEl.value = _;
-      removeButtonEl.onclick = _._._(_, _);
+      removeButtonEl.value = 'remove key';
+      removeButtonEl.onclick = obj.handler.bind(this, displayEl);
 
       const formEl = document.createElement('form');
       formEl.appendChild(keyInputEl);
@@ -74,7 +74,7 @@ try {
       container.appendChild(formEl);
       container.appendChild(displayEl);
       container.onclick = (function (e) {
-        if (e.target === e.currentTarget) console.log(_, _);
+        if (e.target === e.currentTarget) console.log(this, e);
       }).bind(this);
 
       return container;
@@ -86,11 +86,11 @@ try {
     .appendChild(obj.view(title));
 
 
-  const assert = (_, _) => {
-    if (_) {
-      console.log('%cPASS: ' + _, 'color:green');
+  const assert = (result, testName) => {
+    if (result) {
+      console.log('%cPASS: ' + testName, 'color:green');
     } else {
-      console.log('%cFAIL: ' + _, 'color:red');
+      console.log('%cFAIL: ' + testName, 'color:red');
     }
   };
 

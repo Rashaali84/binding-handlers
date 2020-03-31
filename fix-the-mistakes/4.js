@@ -11,15 +11,15 @@ try {
     },
     log: [],
     add: function () { // 1 mistake
-      this.state.num + this.state.step;
+      this.state.num += this.state.step;
     },
     subtract: function () { // 1 mistake
-      this.state.num - this.state.step;
+      this.state.num -= this.state.step;
     },
     handleClick: function (display, event) { // 1 mistake
-      // debugger;
-      const action = event.target.value;
-      this[action]();
+      debugger;
+      const action = event.target.innerHTML;
+      this[action].call(this);
       display.innerHTML = this.state.num;
       this.log.push({
         action,
@@ -27,29 +27,29 @@ try {
       });
     },
     handleStepChange: function (event) { // 1 mistake
-      this.state.step = event.target.value;
+      this.state.step = Number(event.target.value);
       this.log.push({
         action: 'set step',
         newState: JSON.parse(JSON.stringify(this.state))
       });
     },
     view: function (id) { // 5 mistakes
-      // debugger;
+      debugger;
       const displayEl = document.createElement('code');
       displayEl.innerHTML = this.state.num;
 
       const upButtonEl = document.createElement('button');
       upButtonEl.innerHTML = 'add';
-      upButtonEl.onclick = this.handleClick;
+      upButtonEl.onclick = this.handleClick.bind(this, displayEl);
 
       const downButtonEl = document.createElement('button');
       downButtonEl.innerHTML = 'subtract';
-      downButtonEl.onclick = this.handleClick;
+      downButtonEl.onclick = this.handleClick.bind(this, displayEl);
 
       const stepSizeEl = document.createElement('input');
       stepSizeEl.type = 'number';
       stepSizeEl.value = this.state.step;
-      stepSizeEl.onchange = this.handleStepChange;
+      stepSizeEl.onchange = this.handleStepChange.bind(this, displayEl);
 
       const container = document.createElement('div');
       container.id = id;

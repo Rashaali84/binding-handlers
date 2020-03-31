@@ -11,16 +11,19 @@ try {
     },
     log: [],
     numToCharCode: function () { // 1 mistake
-      this.state.charCode = ((this.state.num % 255) + 255) % 255;
+      //debugger;
+      this.state.charCode = this.state.num >= 0 ? ((this.state.num % 255) + 255) % 255 : 255 + (this.state.num + 1);
+      this.state.num = this.state.num < 0 ? -1 : this.state.num;
+      //this.state.charCode = (((this.state.num % 255) - 255) % 255);
     },
     renderCharCode: function () { // 1 mistake
-      return `<text>${String.fromCharCode(this.state.num)}</text>`;
+      return `<text>${String.fromCharCode(this.state.charCode)}</text>`;
     },
     handler: function (display, event) { // 2 mistakes
       // debugger;
       this.state.num = Number(event.target.value);
-      this.renderCharCode();
-      display.innerHTML = this.numToCharCode();
+      this.numToCharCode();
+      display.innerHTML = this.renderCharCode();
       this.log.push(
         JSON.parse(JSON.stringify(this.state))
       );
@@ -33,7 +36,7 @@ try {
       const inputEl = document.createElement('input');
       inputEl.type = 'number';
       inputEl.value = '0';
-      inputEl.onchange = this.handler.call(this, outputEl);
+      inputEl.onchange = this.handler.bind(this, outputEl);
 
       const container = document.createElement('div');
       container.id = id;

@@ -11,23 +11,24 @@ try {
     },
     log: [],
     renderState: function () { // 2 mistakes
-      return `{ X: ` + ${ this.state.x } +`, Y: ` + ${ this.state.y } +` }`;
+      //I removed + and unnecessary ` signs
+      return `{ X: ${this.state.x} , Y: ${this.state.y}  }`;
     },
     handler: function (event) { // 3 mistakes
-      debugger;
-      this.state.x = Number(event.X);
-      this.state.y = Number(event.Y);
-      event.innerHTML = this.renderState();
+      //debugger;
+      this.state.x = Number(event.target.x.value);
+      this.state.y = Number(event.target.y.value);
+      event.target.innerHTML = this.renderState();
       this.log.push(
         JSON.parse(JSON.stringify(this.state))
       );
     },
     view: function (id) { // 3 mistakes
-      // debugger;
-      const container = document.createElement(div);
+      //debugger;
+      const container = document.createElement('div');
       container.id = id;
       container.innerHTML = this.renderState.bind(this);
-      container.onmousemove = this.handler(this);
+      container.onmousemove = this.handler.bind(this);
       container.className = 'exercise';
 
       container.onclick = (function (e) {

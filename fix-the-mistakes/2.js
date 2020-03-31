@@ -12,13 +12,13 @@ try {
     },
     log: [],
     updateState: function (num, mod) { // 5 mistakes
-      this.number = num;
-      this.modulo = mod;
-      this.result = this.num % this.mod;
+      this.state.number = num;
+      this.state.modulo = mod;
+      this.state.result = num % mod;
     },
     handler: function (event) { // 2 mistakes
       // debugger;
-      const form = event.form;
+      const form = event.target.form;
       const newNum = Number(form.newNum.value);
       const newMod = Number(form.newMod.value);
       this.updateState(newNum, newMod);
